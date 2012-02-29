@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/opt/extra/bin/ruby
 
 require "yaml"
 if File.symlink?(__FILE__)

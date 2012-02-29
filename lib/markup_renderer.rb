@@ -38,7 +38,11 @@ class MarkupRenderer
 
   def to_html
     pre_process
-    @markdown = RDiscount.new(@content, *@options[:markdown])
+    if defined?JRUBY_VERSION
+      @markdown = Maruku.new(@content)
+    else
+      @markdown = RDiscount.new(@content, *@options[:markdown])
+    end
     post_process(@markdown.to_html)
   end
 

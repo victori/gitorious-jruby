@@ -90,3 +90,36 @@ Rails::Initializer.run do |config|
     Grit::Git.git_binary = GitoriousConfig["git_binary"]
   end
 end
+
+git_threaded = ENV['GIT_THREADED']
+messaging_threaded = ENV['MESSAGING_THREADED']
+
+if defined?JRUBY_VERSION
+  if messaging_threaded and !defined?@@JRUBY_MESSAGING
+    @@JRUBY_MESSAGING = true
+    Thread.new {
+      ActiveMessaging::load_processors
+      ActiveMessaging::start
+    }.run
+  end
+
+  if git_threaded and !defined?@@JRUBY_GIT
+    @@JRUBY_GIT = true
+    require File.dirname(__FILE__)+'/../lib/gitorious/git_daemon'
+    Thread.new {
+      git_options = {
+        :port => 9418,
+        :host => "0.0.0.0",
+        :logfile => File.join(RAILS_ROOT, "log", "git-daemon.log"),
+        :pidfile => File.join(RAILS_ROOT, "log", "git-daemon.pid"),
+        :daemonize => false,
+        :reuseaddr => true,
+        :disable_geoip => false,
+      }
+
+      ActiveRecord::Base.allow_concurrency = true
+      @git_daemon = Git::Daemon.new(git_options)
+      @git_daemon.start
+    }.run
+  end
+end

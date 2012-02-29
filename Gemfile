@@ -8,7 +8,12 @@ gem "hoe", :require => false
 gem "echoe", :require => false
 gem "ruby-yadis", :require => "yadis"
 gem "ruby-openid", :require => "openid"
-gem "rdiscount", "1.3.1.1", :platforms => :ruby
+gem "bundler" if defined?JRUBY_VERSION
+if defined?JRUBY_VERSION
+  gem "maruku", "0.6.0"
+else
+  gem "rdiscount", "1.3.4", :platforms => :ruby
+end
 gem "mime-types", :require => "mime/types"
 gem "diff-lcs", :require => "diff/lcs"
 gem "oauth"
@@ -40,6 +45,7 @@ group :test do
   gem "factory_girl", "~> 1.3.0"
   gem "shoulda", "~> 2.9.1"
   gem "tuxml"
+  #gem "rots", :git => 'https://github.com/roman/rots.git'
   gem "capybara"
 
   gem "launchy" # used only for Capybara's save_and_open_page for launching the browser
@@ -56,7 +62,9 @@ end
 
 group :resque do
   gem "resque"
-  gem "SystemTimer"
+  unless defined?JRUBY_VERSION
+    gem "SystemTimer"
+  end
 end
 
 group :stomp do

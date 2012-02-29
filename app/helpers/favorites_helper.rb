@@ -59,6 +59,7 @@ module FavoritesHelper
 
   # Builds a link to the target of a favorite event
   def link_to_watchable(watchable)
+    return if watchable.nil?
     case watchable
     when Repository
       link_to(repo_title(watchable, watchable.project),
@@ -84,6 +85,7 @@ module FavoritesHelper
   end
 
   def css_classes_for(watchable)
+    return if watchable.nil?
     css_classes = ["favorite"]
     css_classes << css_class_for_watchable(watchable)
     if current_user == watchable.user

@@ -1,0 +1,1 @@
+MESSAGING_THREADED=1 GIT_THREADED=1 RAILS_ENV=production CLASSPATH=lib/jms-1.1.jar jruby -S script/server -p 8008

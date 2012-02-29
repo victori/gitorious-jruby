@@ -9,11 +9,11 @@ gitorious_yaml = YAML::load_file(File.join(Rails.root, "config/gitorious.yml"))[
 # We can't use a TLD in domain (e.g. we can't set localhost here)!
 domain = gitorious_yaml["gitorious_host"]
 
-if domain =~ /\./
-  domain = ".#{domain}"
-else
-  domain = ""
-end
+# if domain =~ /\\./
+#   domain = ".#{domain}"
+# else
+#   domain = ""
+# end
 
 ActionController::Base.session = {
   :key    => '_gitorious_sess',
@@ -21,7 +21,6 @@ ActionController::Base.session = {
   :domain => domain,
   :expire_after => 3.weeks
 }
-
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
 # (create the session table with "rake db:sessions:create")

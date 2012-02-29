@@ -120,9 +120,9 @@ module Gitorious::Messaging::StompAdapter
     def connect
       host = GitoriousConfig["stomp_server_address"] || "localhost"
       port = GitoriousConfig["stomp_server_port"] || 61613
-      login = GitoriousConfig["stomp_server_login"]
-      passcode = GitoriousConfig["stomp_server_passcode"]
-      Stomp::Connection.open(login, passcode, host, port, true)
+      user = GitoriousConfig["stomp_server_login"] || nil
+      pass = GitoriousConfig["stomp_server_passcode"] || nil
+      Stomp::Connection.open(user, pass, host, port, true)
     end
 
     def connection
